@@ -22,6 +22,19 @@ class default_cmds:
         files = os.listdir(kernel_instance.current_dir)
         print("\n".join(files))
 
+    @staticmethod
+    def cd(kernel_instance, *args):
+        if len(args) == 0:
+            print("No directory specified.")
+            return
+        new_dir = args[0]
+        try:
+            os.chdir(new_dir)
+            kernel_instance.current_dir = os.getcwd()
+            print(f"Changed directory to {kernel_instance.current_dir}")
+        except Exception as e:
+            print(f"Error changing directory: {e}")
+
 
 if __name__ == "__main__":
     default_cmds.help(None)  # Test call

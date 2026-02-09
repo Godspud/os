@@ -24,11 +24,11 @@ class kernel:
         self.cmd_dict[name] = {"handler": handler, "help_text": help_text}
         # format: "file.class.method" or "file.function"
         self.parts = self.cmd_dict[name]["handler"].split(".")
-        file_name = parts[0]
+        file_name = self.parts[0]
         file_path = join(dirname(abspath(__file__)), file_name + ".py")
         spec = spec_from_file_location(file_name, file_path)
         self.module = module_from_spec(spec)
-        spec.loader.exec_module(module)
+        spec.loader.exec_module(self.module)
 
     def execute_command(self, name, *args):
         if name in self.cmd_dict:
@@ -52,5 +52,6 @@ kernel_instance.register_command(
     "help_debug", "cmds.default_cmds.help_debug", "Debug Help"
 )
 kernel_instance.register_command("ls", "cmds.default_cmds.ls", "List files")
+kernel_instance.register_command("cd", "cmds.default_cmds.cd", "Change directory")
 while True:
     print(kernel_instance.execute_command(input("Enter command: ")))
