@@ -11,6 +11,7 @@ class kernel:
         self.running = True
         self.cmd_dict = {}
         self.current_dir = Path.cwd()
+        self.home_dir = Path.cwd()
         end = perf_counter()
         print(f"Kernel initialized in {end - start:.6f} seconds")
 
@@ -60,5 +61,7 @@ kernel_instance.register_command(
 )
 kernel_instance.register_command("ls", "cmds.default_cmds.ls", "List files")
 kernel_instance.register_command("cd", "cmds.default_cmds.cd", "Change directory")
+kernel_instance.register_command("mv", "cmds.default_cmds.mv", "Move file")
+kernel_instance.register_command("info", "cmds.default_cmds.info", "Show info")
 while True:
     print(kernel_instance.execute_command(input("Enter command: ")))
