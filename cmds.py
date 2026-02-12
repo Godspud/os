@@ -2,15 +2,15 @@ import os
 import shutil
 
 
-def replace_with_home(kernel_instance, *args):
-    args = list(args)
-    print(args, "e")
+def replace_with_home(kernel_instance, args):
+    listt = []
     for object in args:
+        listt.append(object)
+    for object in listt:
         if "~" in object:
             temp = object.replace("~", str(kernel_instance.home_dir))
-            args[args.index(object)] = temp
-    args = tuple(args)
-    print(args, "e")
+            listt[listt.index(object)] = temp
+    args = tuple(listt)
     return args
 
 
@@ -37,14 +37,14 @@ class default_cmds:
             args = (str(kernel_instance.current_dir),)
         else:
             print(args)
-            args = replace_with_home(args)
+            args = replace_with_home(kernel_instance, args)
             print(args)
         files = os.listdir(args[0])
         return "\n".join(files)
 
     @staticmethod
     def cd(kernel_instance, *args):
-        args = replace_with_home(args)
+        args = replace_with_home(kernel_instance, args)
         if len(args) == 0:
             return "No directory specified."
         new_dir = args[0]
@@ -57,7 +57,7 @@ class default_cmds:
 
     @staticmethod
     def mv(kernel_instance, *args):
-        args = replace_with_home(args)
+        args = replace_with_home(kernel_instance, args)
         try:
             shutil.move(args[0], args[1])
             return f"Moved {args[0]} to {args[1]}"
