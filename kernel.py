@@ -66,7 +66,6 @@ kernel_instance.register_command(
 )
 kernel_instance.register_command("rm", "cmds.default_cmds.rm", "Remove file")
 kernel_instance.register_command("cp", "cmds.default_cmds.cp", "Copy file")
-print(kernel_instance.execute_command("rm et.txt"))
 while True:
     raw = input("Enter command: ")
     parts = raw.split()
