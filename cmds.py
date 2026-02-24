@@ -67,8 +67,8 @@ class default_cmds:
             os.chdir(new_dir)
             kernel_instance.current_dir = os.getcwd()
             return f"Changed directory to {kernel_instance.current_dir}"
-        except Exception as e:
-            return f"Error changing directory: {e}"
+        except PermissionError:
+            return f"Error changing directory: Permission denied"
 
     @staticmethod
     def mv(kernel_instance, *args):
@@ -76,8 +76,8 @@ class default_cmds:
         try:
             shutil.move(args[0], args[1])
             return f"Moved {args[0]} to {args[1]}"
-        except Exception as e:
-            return f"Error moving file: {e}"
+        except PermissionError:
+            return f"Error moving file: Permission denied"
 
     @staticmethod
     def pwd(kernel_instance, *args):
@@ -91,6 +91,8 @@ class default_cmds:
             return f"Removed file: {args[0]}"
         except IndexError:
             return f"Usage: rm <file_path>"
+        except PermissionError:
+            return f"Error removing file: Permission denied"
 
     @staticmethod
     def cp(kernel_instance, *args):
@@ -100,6 +102,8 @@ class default_cmds:
             return f"Copied {args[0]} to {args[1]}"
         except IndexError:
             return f"Usage: cp <source> <destination>"
+        except PermissionError:
+            return f"Error copying file: Permission denied"
 
 
 if __name__ == "__main__":
