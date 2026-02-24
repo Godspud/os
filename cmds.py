@@ -32,15 +32,30 @@ class default_cmds:
 
     @staticmethod
     def ls(kernel_instance, *args):
-        print(kernel_instance.current_dir)
         if len(args) == 0:
             args = (str(kernel_instance.current_dir),)
-        else:
-            print(args)
+            try:
+                files = os.listdir(args[0])
+                return "\n".join(files)
+            except PermissionError:
+                return f"Permission denied: {args[0]}"
+        elif len(args) == 1:
             args = replace_with_home(kernel_instance, args)
-            print(args)
-        files = os.listdir(args[0])
-        return "\n".join(files)
+            try:
+                files = os.listdir(args[0])
+                return "\n".join(files)
+            except PermissionError:
+                return f"Permission denied: {args[0]}"
+        else:
+            files = []
+            for arg in args:
+                files.append(f"file's {arg[0]} contents:")
+                arg = replace_with_home(kernel_instance, (arg,))
+                try:
+                    files.append("\n".join(os.listdir(arg[0])))
+                except PermissionError:
+                    files.append(f"Permission denied: {arg[0]}")
+            return "\n".join(files)
 
     @staticmethod
     def cd(kernel_instance, *args):
@@ -65,9 +80,27 @@ class default_cmds:
             return f"Error moving file: {e}"
 
     @staticmethod
-    def info(kernel_instance, *args):
+    def pwd(kernel_instance, *args):
         return f"Current Directory: {kernel_instance.current_dir}\nHome Directory: {kernel_instance.home_dir}"
+
+    @staticmethod
+    def rm(kernel_instance, *args):
+        args = replace_with_home(kernel_instance, args)
+        try:
+            os.remove(args[0])
+            return f"Removed file: {args[0]}"
+        except IndexError:
+            return f"Usage: rm <file_path>"
+
+    @staticmethod
+    def cp(kernel_instance, *args):
+        args = replace_with_home(kernel_instance, args)
+        try:
+            shutil.copy(args[0], args[1])
+            return f"Copied {args[0]} to {args[1]}"
+        except IndexError:
+            return f"Usage: cp <source> <destination>"
 
 
 if __name__ == "__main__":
-    default_cmds.help(None)  # Test call
+    import kernel

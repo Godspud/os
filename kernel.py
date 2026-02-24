@@ -38,7 +38,6 @@ class kernel:
         }
 
     def execute_command(self, name, *args):
-        name, *args = name.split()
         if name in self.cmd_dict:
             cmd = self.cmd_dict[name]
             handler = cmd["handler"]
@@ -62,6 +61,17 @@ kernel_instance.register_command(
 kernel_instance.register_command("ls", "cmds.default_cmds.ls", "List files")
 kernel_instance.register_command("cd", "cmds.default_cmds.cd", "Change directory")
 kernel_instance.register_command("mv", "cmds.default_cmds.mv", "Move file")
-kernel_instance.register_command("info", "cmds.default_cmds.info", "Show info")
+kernel_instance.register_command(
+    "pwd", "cmds.default_cmds.pwd", "Print working directory"
+)
+kernel_instance.register_command("rm", "cmds.default_cmds.rm", "Remove file")
+kernel_instance.register_command("cp", "cmds.default_cmds.cp", "Copy file")
+print(kernel_instance.execute_command("rm et.txt"))
 while True:
-    print(kernel_instance.execute_command(input("Enter command: ")))
+    raw = input("Enter command: ")
+    parts = raw.split()
+    if not parts:
+        continue
+    name = parts[0]
+    args = parts[1:]
+    print(kernel_instance.execute_command(name, *args))
