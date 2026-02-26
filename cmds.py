@@ -105,6 +105,57 @@ class default_cmds:
         except PermissionError:
             return f"Error copying file: Permission denied"
 
+    @staticmethod
+    def cat(kernel_instance, *args):
+        args = replace_with_home(kernel_instance, args)
+        output = []
+        for arg in args:
+            try:
+                with open(arg, "r") as f:
+                    output.append(f.read())
+            except IndexError:
+                output.append(f"Usage: cat <file_path>")
+            except PermissionError:
+                output.append(f"Error reading file: Permission denied")
+            except FileNotFoundError:
+                output.append(f"File not found: {arg}")
+            except IsADirectoryError:
+                output.append(f"Is a directory: {arg}")
+        return "\n".join(output)
+
+    @staticmethod
+    def echo(kernel_instance, *args):
+        args = list(args)
+        for counter, arg in enumerate(args):
+            if "'" in arg:
+                arg = arg.replace("'", "")
+            if '"' in arg:
+                arg = arg.replace('"', "")
+            if "'" in arg:
+                arg = arg.replace("'", "")
+            if '"' in arg:
+                arg = arg.replace('"', "")
+            args[counter] = arg
+        return "".join(args)
+
+    @staticmethod
+    def mkdir(kernel_instance, *args):
+        args = replace_with_home(kernel_instance, args)
+        output = []
+        for arg in args:
+            try:
+                os.mkdir(arg)
+                output.append(f"Directory created: {arg}")
+            except IndexError:
+                output.append(f"Usage: mkdir <directory_name>")
+            except PermissionError:
+                output.append(f"Error creating directory: Permission denied")
+            except FileExistsError:
+                output.append(f"Directory already exists: {arg}")
+            except FileNotFoundError:
+                output.append(f"File not found: {arg}")
+        return "\n".join(output)
+
 
 if __name__ == "__main__":
     import kernel

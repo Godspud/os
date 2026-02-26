@@ -50,7 +50,7 @@ class kernel:
             else:
                 return handler(self, *args)
         else:
-            return "Command not found: " + name
+            return f"Command not found: {name}"
 
 
 kernel_instance = kernel()
@@ -66,8 +66,16 @@ kernel_instance.register_command(
 )
 kernel_instance.register_command("rm", "cmds.default_cmds.rm", "Remove file")
 kernel_instance.register_command("cp", "cmds.default_cmds.cp", "Copy file")
+kernel_instance.register_command("cat", "cmds.default_cmds.cat", "Print file contents")
+kernel_instance.register_command("echo", "cmds.default_cmds.echo", "Echo arguments")
+kernel_instance.register_command("mkdir", "cmds.default_cmds.mkdir", "Make directory")
 while True:
-    raw = input("Enter command: ")
+    if str(kernel_instance.home_dir) in str(kernel_instance.current_dir):
+        raw = input(
+            f"{str(kernel_instance.current_dir).replace(str(kernel_instance.home_dir), '~')} > "
+        )
+    else:
+        raw = input(f"{kernel_instance.current_dir} > ")
     parts = raw.split()
     if not parts:
         continue
