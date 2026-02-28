@@ -72,10 +72,10 @@ kernel_instance.register_command("mkdir", "cmds.default_cmds.mkdir", "Make direc
 while True:
     if str(kernel_instance.home_dir) in str(kernel_instance.current_dir):
         raw = input(
-            f"{str(kernel_instance.current_dir).replace(str(kernel_instance.home_dir), '~')} > "
+            f"{str(kernel_instance.current_dir).replace(str(kernel_instance.home_dir), '~')} > $"
         )
     else:
-        raw = input(f"{kernel_instance.current_dir} > ")
+        raw = input(f"{kernel_instance.current_dir} > $")
     parts = raw.split()
     if not parts:
         continue

@@ -156,6 +156,24 @@ class default_cmds:
                 output.append(f"File not found: {arg}")
         return "\n".join(output)
 
+    @staticmethod
+    def rmdir(kernel_instance, *args):
+        args = replace_with_home(kernel_instance, args)
+        output = []
+        for arg in args:
+            try:
+                os.rmdir(arg)
+                output.append(f"Directory removed: {arg}")
+            except IndexError:
+                output.append(f"Usage: rmdir <directory_name>")
+            except PermissionError:
+                output.append(f"Error removing directory: Permission denied")
+            except FileNotFoundError:
+                output.append(f"Directory not found: {arg}")
+            except OSError:
+                output.append(f"Directory not empty: {arg}")
+        return "\n".join(output)
+
 
 if __name__ == "__main__":
     import kernel
