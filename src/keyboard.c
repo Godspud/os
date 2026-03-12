@@ -1,28 +1,19 @@
 #include "keyboard.h"
 #include "io.h"
 
-unsigned int keyboard_repeat_delay = 2000;
-unsigned int keyboard_repeat_rate = 150;
+unsigned int keyboard_repeat_delay = 300;
+unsigned int keyboard_repeat_rate = 100;
 
 static int repeat_enabled = 1;
 static int last_scancode = 0;
 static int last_key_pressed = 0;
-static unsigned int key_hold_time = 0;
-static unsigned int last_repeat_time = 0;
+static unsigned int key_press_time = 0;
 
-static void delay_ms(unsigned int ms)
-{
-    volatile unsigned int i;
-    for (unsigned int m = 0; m < ms; m++)
-    {
-        for (i = 0; i < 100000; i++)
-            ;
-    }
-}
+static unsigned int timer_ticks = 0;
 
 static unsigned int get_time_ms(void)
 {
-    return 0;
+    return timer_ticks;
 }
 
 char scancode_to_ascii(unsigned char scancode, int shift_pressed)
@@ -75,8 +66,8 @@ void keyboard_init(void)
 
     last_scancode = 0;
     last_key_pressed = 0;
-    key_hold_time = 0;
-    last_repeat_time = 0;
+    key_press_time = 0;
+    timer_ticks = 0;
 }
 
 void keyboard_set_repeat(int enabled)
@@ -97,18 +88,23 @@ void keyboard_set_repeat_rate(unsigned int rate_ms)
 char keyboard_read(int *shift_pressed)
 {
     static int internal_shift = 0;
-    static unsigned int repeat_counter = 0;
+
+    timer_ticks++;
 
     if ((inb(KEYBOARD_STATUS_PORT) & 0x01) == 0)
     {
         if (repeat_enabled && last_key_pressed && last_scancode != 0)
         {
-            repeat_counter++;
+            unsigned int current_time = get_time_ms();
+            unsigned int hold_time = current_time - key_press_time;
 
-            if (repeat_counter > keyboard_repeat_delay / 10)
+            if (hold_time >= keyboard_repeat_delay)
             {
-                if (repeat_counter % (keyboard_repeat_rate / 10) == 0)
+                unsigned int repeat_time = hold_time - keyboard_repeat_delay;
+
+                if (repeat_time >= keyboard_repeat_rate)
                 {
+                    key_press_time = current_time;
                     char repeated_char = scancode_to_ascii(last_scancode, internal_shift);
                     if (repeated_char != 0)
                     {
@@ -135,7 +131,6 @@ char keyboard_read(int *shift_pressed)
         if (released_code == last_scancode)
         {
             last_key_pressed = 0;
-            repeat_counter = 0;
         }
 
         return 0;
@@ -150,7 +145,7 @@ char keyboard_read(int *shift_pressed)
 
     last_scancode = scancode;
     last_key_pressed = 1;
-    repeat_counter = 0;
+    key_press_time = get_time_ms();
 
     return scancode_to_ascii(scancode, internal_shift);
 }
