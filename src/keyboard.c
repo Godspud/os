@@ -22,14 +22,7 @@ static void delay_ms(unsigned int ms)
 
 static unsigned int get_time_ms(void)
 {
-    static unsigned int counter = 0;
-    counter++;
-    return counter * 10;
-}
-
-static void reset_timer(void)
-{
-    // Placeholder - in real OS would use PIT
+    return 0;
 }
 
 char scancode_to_ascii(unsigned char scancode, int shift_pressed)
