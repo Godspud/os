@@ -1,11 +1,13 @@
 [BITS 32]
 
-majic equ 0x1BADB002
-flags equ 0x0
-checksum equ -(majic + flags)
+extern kernel_main
 
-section .muiltiboot
-    dd majic
+magic    equ 0x1BADB002
+flags    equ 0x0
+checksum equ -(magic + flags)
+
+section .multiboot
+    dd magic
     dd flags
     dd checksum
 
