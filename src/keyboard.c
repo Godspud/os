@@ -1,8 +1,8 @@
 #include "keyboard.h"
 #include "io.h"
 
-unsigned int keyboard_repeat_delay = 300;
-unsigned int keyboard_repeat_rate = 100;
+unsigned int keyboard_repeat_delay = 2000;
+unsigned int keyboard_repeat_rate = 150;
 
 static int repeat_enabled = 1;
 static int last_scancode = 0;
@@ -97,23 +97,26 @@ void keyboard_set_repeat_rate(unsigned int rate_ms)
 char keyboard_read(int *shift_pressed)
 {
     static int internal_shift = 0;
-
-    if (repeat_enabled && last_key_pressed && last_scancode != 0)
-    {
-        key_hold_time += keyboard_repeat_rate;
-
-        if (key_hold_time >= keyboard_repeat_delay + keyboard_repeat_rate)
-        {
-            char repeated_char = scancode_to_ascii(last_scancode, internal_shift);
-            if (repeated_char != 0)
-            {
-                return repeated_char;
-            }
-        }
-    }
+    static unsigned int repeat_counter = 0;
 
     if ((inb(KEYBOARD_STATUS_PORT) & 0x01) == 0)
     {
+        if (repeat_enabled && last_key_pressed && last_scancode != 0)
+        {
+            repeat_counter++;
+
+            if (repeat_counter > keyboard_repeat_delay / 10)
+            {
+                if (repeat_counter % (keyboard_repeat_rate / 10) == 0)
+                {
+                    char repeated_char = scancode_to_ascii(last_scancode, internal_shift);
+                    if (repeated_char != 0)
+                    {
+                        return repeated_char;
+                    }
+                }
+            }
+        }
         return 0;
     }
 
@@ -132,7 +135,7 @@ char keyboard_read(int *shift_pressed)
         if (released_code == last_scancode)
         {
             last_key_pressed = 0;
-            key_hold_time = 0;
+            repeat_counter = 0;
         }
 
         return 0;
@@ -147,7 +150,7 @@ char keyboard_read(int *shift_pressed)
 
     last_scancode = scancode;
     last_key_pressed = 1;
-    key_hold_time = 0;
+    repeat_counter = 0;
 
     return scancode_to_ascii(scancode, internal_shift);
 }
