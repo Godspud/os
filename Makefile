@@ -67,4 +67,11 @@ run: $(ISO)
 clean:
 	rm -rf $(BUILD_DIR) $(ISO_DIR)
 
+git:
+	git add .
+	git commit -m "Update: $$(date +'%Y-%m-%d %H:%M')"
+	git push origin testing
+
+all: $(ISO) git
+
 .PHONY: all run clean
