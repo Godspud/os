@@ -1,8 +1,8 @@
 #include "keyboard.h"
 #include "io.h"
 
-unsigned int keyboard_repeat_delay = 300;
-unsigned int keyboard_repeat_rate = 100;
+unsigned int keyboard_repeat_delay = 1000;
+unsigned int keyboard_repeat_rate = 500;
 
 static int repeat_enabled = 1;
 static int last_scancode = 0;
