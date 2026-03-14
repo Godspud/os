@@ -67,17 +67,17 @@ Value Color
 # Project Structure
 
 myos/
-boot.asm # Bootloader entry point
-linker.ld # Kernel linker script
-grub.cfg # GRUB configuration
-Makefile # Build system
-readme.md #the description
-src/ # Source code
-kernel.c # Main kernel entry
-vga.c/h # VGA text driver
-keyboard.c/h # PS/2 keyboard driver
-string.c/h # String utilities
-io.h # I/O port helpers
+boot.asm Bootloader entry point
+linker.ld Kernel linker script
+grub.cfg GRUB configuration
+Makefile Build system
+readme.md The description
+src/ Source code
+src/kernel.c Main kernel entry
+src/vga.c/h VGA text driver
+src/keyboard.c/h PS/2 keyboard driver
+src/string.c/h String utilities
+src/io.h I/O port helpers
 
 # How It Works
 
