@@ -1,5 +1,6 @@
 #include "keyboard.h"
 #include "vga.h"
+#include "cmd_processor.h"
 
 static char input_buffer[256];
 static int input_pos = 0;
@@ -14,7 +15,7 @@ void kernel_main()
     keyboard_init();
 
     print_string("================================================\n", COLOR_LIGHT_CYAN);
-    print_string("            Welcome to MyOS!\n", COLOR_WHITE);
+    print_string("            Welcome to OS!\n", COLOR_WHITE);
     print_string("================================================\n\n", COLOR_LIGHT_CYAN);
 
     print_string("Keyboard initialized!\n", COLOR_LIGHT_GREEN);
@@ -49,6 +50,12 @@ void kernel_main()
                     print_char(input_char, COLOR_WHITE);
                 }
             }
+        }
+        if (input_buffer[input_pos - 1] == '\n')
+        {
+            input_buffer[input_pos - 1] = '\0';
+            process_command(input_buffer);
+            input_pos = 0;
         }
     }
 }
