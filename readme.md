@@ -1,12 +1,12 @@
-# OS
+## OS
 
 A minimal 32-bit x86 operating system written in C and Assembly. Built from scratch for educational purposes to understand how operating systems work at the lowest level.
 
-# Overview
+## Overview
 
 MyOS is a bare-metal operating system that boots via GRUB and runs on x86 hardware or emulators like QEMU. It features a command-line interface with keyboard input, VGA text output, and a simple shell with extensible commands.
 
-# Features
+## Features
 
 32-bit protected mode kernel\
 GRUB Multiboot compliance\
@@ -42,7 +42,7 @@ Commit and Push
 make git
 This automatically commits changes and pushes to the testing branch.
 
-# VGA Colors
+## VGA Colors
 
 The system supports 16 VGA colors:
 
@@ -64,7 +64,7 @@ Value Color\
 14 Light Brown\
 15 White
 
-# Project Structure
+## Project Structure
 
 OS/
 boot.asm Bootloader entry point\
@@ -79,14 +79,14 @@ src/keyboard.c/h PS/2 keyboard driver\
 src/string.c/h String utilities\
 src/io.h I/O port helpers\
 
-# How It Works
+## How It Works
 
 Boot: GRUB loads the kernel at 1MB memory address\
 Entry: Assembly bootloader sets up stack and calls C kernel\
 Initialize: VGA driver, keyboard driver, and shell are initialized\
 Loop: Main loop waits for keyboard input and processes commands\
 
-# Key Repeat
+## Key Repeat
 
 Hold a key to enable auto-repeat. Adjust timing with:
 
@@ -94,21 +94,26 @@ delay <ms> - Time before repeat starts (default: 300ms)\
 rate <ms> - Time between repeats (default: 100ms)\
 Lower values = faster repeat. Higher values = slower repeat.
 
-# TODO
+## TODO
 
-Priority 1\
+# Priority 1
+
 Add command history with up\down arrows\
 Add color command to change text color\
 Add echo command to print text\
 Add reboot command to restart system\
 Fix clear command for proper screen reset\
-Priority 2\
+
+# Priority 2
+
 Add version command\
 Add boot banner with version info\
 Add LED control for CapsLock and NumLock\
 Add arrow key support\
 Add memory info command\
-Priority 3\
+
+# Priority 3
+
 Add timer interrupts using PIT\
 Add proper GDT setup\
 Add IDT and interrupt handling\
@@ -120,15 +125,15 @@ Add screen saver after idle period\
 Add simple games like Snake or Pong\
 Add PS\2 mouse support
 
-# Development
+## Development
 
 The testing branch is the active development branch. All changes are automatically pushed there when running make.
 
-# License
+## License
 
 This project is for educational purposes. Feel free to use, modify, and learn from the code.
 
-# Acknowledgments
+## Acknowledgments
 
 OSDev Wiki for documentation\
 James Molloy's kernel tutorials\
