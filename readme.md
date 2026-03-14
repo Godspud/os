@@ -51,7 +51,7 @@ Value Color
 1 Blue
 2 Green
 3 Cyan
-4 Red   
+4 Red  
 5 Magenta
 6 Brown
 7 Light Grey
@@ -67,16 +67,17 @@ Value Color
 # Project Structure
 
 myos/
-├── boot.asm # Bootloader entry point
-├── linker.ld # Kernel linker script
-├── grub.cfg # GRUB configuration
-├── Makefile # Build system
-└── src/ # Source code
-├── kernel.c # Main kernel entry
-├── vga.c/h # VGA text driver
-├── keyboard.c/h # PS/2 keyboard driver
-├── string.c/h # String utilities
-└── io.h # I/O port helpers
+boot.asm # Bootloader entry point
+linker.ld # Kernel linker script
+grub.cfg # GRUB configuration
+Makefile # Build system
+readme.md #the description
+src/ # Source code
+kernel.c # Main kernel entry
+vga.c/h # VGA text driver
+keyboard.c/h # PS/2 keyboard driver
+string.c/h # String utilities
+io.h # I/O port helpers
 
 # How It Works
 
