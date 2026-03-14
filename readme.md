@@ -23,7 +23,7 @@ NASM assembler\
 GNU Make\
 GRUB utilities\
 QEMU (for testing)\
-On Debian/Ubuntu:\
+On Debian/Ubuntu:
 
 sudo apt install nasm gcc-multilib make grub-pc-bin xorriso qemu-system-x86
 Compile
@@ -62,7 +62,7 @@ Value Color\
 12 Light Red\
 13 Light Magenta\
 14 Light Brown\
-15 White\
+15 White
 
 # Project Structure
 
