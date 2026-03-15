@@ -2,7 +2,7 @@
 
 ## DISCLAMIER:
 
-i used ai in hte Makefile, readme.md, linker.ld, boot.asm, grb.cfg\
+i used ai in hte Makefile, readme.md, linker.ld, boot.asm, grb.cfg
 
 anways
 
