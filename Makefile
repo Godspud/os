@@ -32,7 +32,7 @@ OBJECTS = $(ASM_OBJ) $(C_OBJECTS)
 .DEFAULT_GOAL := log
 
 # Default target
-all: $(ISO) git
+all: $(ISO)
 
 # Create build directory
 $(BUILD_DIR):
@@ -62,10 +62,11 @@ $(ISO): $(KERNEL)
 run: $(ISO)
 	qemu-system-i386 -cdrom $(ISO) -m 128M
 
-# Build with output logged to build.log
+# Build with output logged to build.log, then push
 log:
 	@echo "=== Build: $$(date) ===" >> $(LOG_FILE)
 	@$(MAKE) all 2>&1 | tee -a $(LOG_FILE); exit $${PIPESTATUS[0]}
+	@$(MAKE) git
 
 # Push to git
 git:
