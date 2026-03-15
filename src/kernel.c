@@ -10,8 +10,11 @@ void kernel_main()
 {
     int shift_pressed = 0;
     char input_char;
+    char argv[16][64];
+    int argc = parse_args("ping 127.0.0.1 -c 4\n", argv, 16);
+    print_string(argv[0], COLOR_LIGHT_GREEN);
 
-    vga_clear(COLOR_BLACK);
+    // vga_clear(COLOR_BLACK);
     vga_enable_cursor();
     keyboard_init();
 

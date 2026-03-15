@@ -3,45 +3,29 @@
 #include "string.h"
 #include "vga.h"
 
-// Custom string copy (no libc)
-static void str_copy(char *dest, const char *src, int max)
-{
-    int i = 0;
-    while (i < max - 1 && src[i] != '\0')
-    {
-        dest[i] = src[i];
-        i++;
-    }
-    dest[i] = '\0';
-}
-
+/**
+ * str_copy: Copies a string from src to dest, ensuring that it does not exceed max characters and is null-terminated.
+ * parse_args: Parses a command line input into individual arguments, splitting on spaces and newlines, and stores them in the provided argv array. Returns the number of arguments parsed.
+ * cmd_processor_init: Initializes the command processor (currently does nothing but can be used for future setup).
+ * process_command: Takes a command line input, parses it into arguments, and executes the corresponding command handler if it matches a known command. If the command is unknown, it prints an error message.
+ * cmd_is_command: Checks if the given input string starts with a known command keyword, returning 1 if it does and 0 otherwise.
+ */
 // Custom string tokenization (simple space splitter)
-static int parse_args(const char *input, char argv[][64], int max_args)
+int parse_args(const char *input, char argv[][64], int max_args)
 {
     int argc = 0;
     int i = 0;
-    int arg_start = 0;
+    int j = 0;
     int in_arg = 0;
-
     while (input[i] != '\0' && argc < max_args)
     {
-        if (input[i] == ' ' || input[i] == '\n')
+        if (input[i] == ' ' || input[i] == '\n' || input[i] == '\t')
         {
             if (in_arg)
             {
-                // End of argument
-                int len = i - arg_start;
-                if (len > 0 && len < 64)
-                {
-                    int j = 0;
-                    while (j < len)
-                    {
-                        argv[argc][j] = input[arg_start + j];
-                        j++;
-                    }
-                    argv[argc][len] = '\0';
-                    argc++;
-                }
+                argv[argc][j] = '\0';
+                argc++;
+                j = 0;
                 in_arg = 0;
             }
         }
@@ -49,30 +33,20 @@ static int parse_args(const char *input, char argv[][64], int max_args)
         {
             if (!in_arg)
             {
-                arg_start = i;
                 in_arg = 1;
+            }
+            if (j < 63)
+            {
+                argv[argc][j++] = input[i];
             }
         }
         i++;
     }
-
-    // Handle last argument
-    if (in_arg && argc < max_args)
+    if (in_arg)
     {
-        int len = i - arg_start;
-        if (len > 0 && len < 64)
-        {
-            int j = 0;
-            while (j < len)
-            {
-                argv[argc][j] = input[arg_start + j];
-                j++;
-            }
-            argv[argc][len] = '\0';
-            argc++;
-        }
+        argv[argc][j] = '\0';
+        argc++;
     }
-
     return argc;
 }
 
@@ -81,7 +55,7 @@ void cmd_processor_init(void)
     // Nothing to initialize yet
 }
 
-void cmd_process(const char *input)
+void process_command(const char *input)
 {
     char argv[16][64];
     int argc = 0;

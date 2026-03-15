@@ -6,6 +6,7 @@
 - strncmp: Compares up to n characters of two null-terminated strings and returns an integer less than, equal to, or greater than zero if the first string is found, respectively, to be less than, to be equal to, or be greater than the second string.
 - memset: Fills a block of memory with a specified value.
 - memcpy: Copies a block of memory from a source to a destination.
+- str_copy: Copies a string from src to dest, ensuring that it does not exceed max characters and is null-terminated.
 */
 /**
  * strlen: Returns the length of a null-terminated string.
@@ -72,4 +73,30 @@ void memcpy(void *dest, const void *src, int n)
     {
         *d++ = *s++;
     }
+}
+/**
+ * str_copy: Copies a string from src to dest, ensuring that it does not exceed max characters and is null-terminated.
+ */
+static void str_copy(char *dest, const char *src, int max)
+{
+    int i = 0;
+    while (i < max - 1 && src[i] != '\0')
+    {
+        dest[i] = src[i];
+        i++;
+    }
+    dest[i] = '\0';
+}
+/**
+ * str_split: Splits a string into two parts based on a delimiter, copying the part before the delimiter into dest and ensuring it is null-terminated.
+ */
+static void str_split(const char *src, char *dest, char delimiter)
+{
+    int i = 0;
+    while (src[i] != '\0' && src[i] != delimiter)
+    {
+        dest[i] = src[i];
+        i++;
+    }
+    dest[i] = '\0';
 }

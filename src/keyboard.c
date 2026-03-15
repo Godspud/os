@@ -12,7 +12,7 @@
 - keyboard_read: Reads a key press from the keyboard, returning the corresponding ASCII character and updating the shift_pressed state.
 */
 
-unsigned int keyboard_repeat_delay = 100000;
+unsigned int keyboard_repeat_delay = 1000000;
 unsigned int keyboard_repeat_rate = 5000;
 
 static int repeat_enabled = 1;
