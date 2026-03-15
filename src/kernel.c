@@ -13,6 +13,13 @@ void kernel_main()
     char argv[16][64];
     int argc = parse_args("ping 127.0.0.1 -c 4\n", argv, 16);
     print_string(argv[0], COLOR_LIGHT_GREEN);
+    print_char('\n', COLOR_WHITE);
+    print_string(argv[1], COLOR_LIGHT_GREEN);
+    print_char('\n', COLOR_WHITE);
+    print_string(argv[2], COLOR_LIGHT_GREEN);
+    print_char('\n', COLOR_WHITE);
+    print_string(argv[3], COLOR_LIGHT_GREEN);
+    print_char('\n', COLOR_WHITE);
 
     // vga_clear(COLOR_BLACK);
     vga_enable_cursor();
