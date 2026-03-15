@@ -32,7 +32,7 @@ OBJECTS = $(ASM_OBJ) $(C_OBJECTS)
 .DEFAULT_GOAL := log
 
 # Default target
-all: $(ISO)
+all: $(ISO) git
 
 # Create build directory
 $(BUILD_DIR):
@@ -66,6 +66,12 @@ run: $(ISO)
 log:
 	@echo "=== Build: $$(date) ===" >> $(LOG_FILE)
 	@$(MAKE) all 2>&1 | tee -a $(LOG_FILE); exit $${PIPESTATUS[0]}
+
+# Push to git
+git:
+	git add .
+	git commit -m "Update: $$(date +'%Y-%m-%d %H:%M')"
+	git push origin testing
 
 clean:
 	rm -rf $(BUILD_DIR) $(ISO_DIR)
