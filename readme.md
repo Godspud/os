@@ -1,5 +1,9 @@
 ## OS
 
+## DISCLAMIER:
+
+i used ai in hte Makefile, readme.md, linker.ld, boot.asm, grb.cfg
+
 A minimal 32-bit x86 operating system written in C and Assembly. Built from scratch for educational purposes to understand how operating systems work at the lowest level.
 
 ## Overview
