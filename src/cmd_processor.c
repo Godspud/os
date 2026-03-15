@@ -3,50 +3,136 @@
 #include "string.h"
 #include "vga.h"
 
-void cmd_processor_init(void)
+// Custom string copy (no libc)
+static void str_copy(char *dest, const char *src, int max)
 {
-    // Initialize any necessary data structures or state here
+    int i = 0;
+    while (i < max - 1 && src[i] != '\0')
+    {
+        dest[i] = src[i];
+        i++;
+    }
+    dest[i] = '\0';
 }
 
-void process_command(const char *input)
+// Custom string tokenization (simple space splitter)
+static int parse_args(const char *input, char argv[][64], int max_args)
 {
-    // Tokenize the input into command and arguments
-    char *argv[16];
     int argc = 0;
-    char input_copy[256];
-    strncpy(input_copy, input, 255);
-    input_copy[255] = '\0';
+    int i = 0;
+    int arg_start = 0;
+    int in_arg = 0;
 
-    char *token = strtok(input_copy, " ");
-    while (token != 0 && argc < 16)
+    while (input[i] != '\0' && argc < max_args)
     {
-        argv[argc++] = token;
-        token = strtok(0, " ");
+        if (input[i] == ' ' || input[i] == '\n')
+        {
+            if (in_arg)
+            {
+                // End of argument
+                int len = i - arg_start;
+                if (len > 0 && len < 64)
+                {
+                    int j = 0;
+                    while (j < len)
+                    {
+                        argv[argc][j] = input[arg_start + j];
+                        j++;
+                    }
+                    argv[argc][len] = '\0';
+                    argc++;
+                }
+                in_arg = 0;
+            }
+        }
+        else
+        {
+            if (!in_arg)
+            {
+                arg_start = i;
+                in_arg = 1;
+            }
+        }
+        i++;
     }
 
+    // Handle last argument
+    if (in_arg && argc < max_args)
+    {
+        int len = i - arg_start;
+        if (len > 0 && len < 64)
+        {
+            int j = 0;
+            while (j < len)
+            {
+                argv[argc][j] = input[arg_start + j];
+                j++;
+            }
+            argv[argc][len] = '\0';
+            argc++;
+        }
+    }
+
+    return argc;
+}
+
+void cmd_processor_init(void)
+{
+    // Nothing to initialize yet
+}
+
+void cmd_process(const char *input)
+{
+    char argv[16][64];
+    int argc = 0;
+
+    // Parse input into arguments
+    argc = parse_args(input, argv, 16);
+
     if (argc == 0)
+    {
         return;
+    }
 
     // Check for built-in commands
     if (strcmp(argv[0], "help") == 0)
-        default_cmds.help(argc, argv);
+    {
+        default_cmds.help(argc, (char **)argv);
+    }
     else if (strcmp(argv[0], "clear") == 0)
-        default_cmds.clear(argc, argv);
+    {
+        default_cmds.clear(argc, (char **)argv);
+    }
     else if (strcmp(argv[0], "echo") == 0)
-        default_cmds.echo(argc, argv);
+    {
+        default_cmds.echo(argc, (char **)argv);
+    }
     else if (strcmp(argv[0], "color") == 0)
-        default_cmds.color(argc, argv);
+    {
+        default_cmds.color(argc, (char **)argv);
+    }
     else if (strcmp(argv[0], "version") == 0)
-        default_cmds.version(argc, argv);
+    {
+        default_cmds.version(argc, (char **)argv);
+    }
     else if (strcmp(argv[0], "reboot") == 0)
-        default_cmds.reboot(argc, argv);
+    {
+        default_cmds.reboot(argc, (char **)argv);
+    }
     else if (strcmp(argv[0], "delay") == 0)
-        default_cmds.delay(argc, argv);
+    {
+        default_cmds.delay(argc, (char **)argv);
+    }
     else if (strcmp(argv[0], "rate") == 0)
-        default_cmds.rate(argc, argv);
+    {
+        default_cmds.rate(argc, (char **)argv);
+    }
     else
+    {
         print_string("Unknown command. Type 'help' for a list of commands.\n", COLOR_LIGHT_RED);
+    }
 }
+
 int cmd_is_command(const char *input)
 {
     if (strncmp(input, "help", 4) == 0)

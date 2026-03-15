@@ -98,6 +98,7 @@ Lower values = faster repeat. Higher values = slower repeat.
 
 # Priority 1
 
+Add comments to all funcs Done vga.c\
 Add command history with up\down arrows\
 Add color command to change text color\
 Add echo command to print text\

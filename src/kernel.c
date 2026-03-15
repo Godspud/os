@@ -1,6 +1,7 @@
 #include "keyboard.h"
 #include "vga.h"
 #include "cmd_processor.h"
+#include "commands/default_cmds.h"
 
 static char input_buffer[256];
 static int input_pos = 0;
